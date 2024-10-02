@@ -55,6 +55,18 @@ rd_csv <- function(path, filename){
 }
 
 #-------------------------------------------------------------------------------
+#---stan出力記録関数
+wr_stan <- function(path, filename){
+  save.image(
+    file = paste0(
+      path,
+      "/",
+      filename
+    )
+  )
+}
+
+#-------------------------------------------------------------------------------
 #---stanコンパイル関数
 cmpl_stan <- function(path, filename){
   df <- stan_model(
@@ -68,12 +80,31 @@ cmpl_stan <- function(path, filename){
 }
 
 #-------------------------------------------------------------------------------
+#---パラメータリスト設定関数
+set_par <- function(){
+  par <- c("b1", "b2", "b3", "sigma")
+  return(par)
+}
+
+#-------------------------------------------------------------------------------
+#---パラメータ初期設定関数
+set_parini <- function(){
+  par_ini <- list(
+    b1 = runif(1, -10, 10),
+    b2 = runif(1, 0, 10),
+    b3 = runif(1, 0, 10),
+    sigma = 10
+  )
+  return(par_ini)
+}
+
+#-------------------------------------------------------------------------------
 #---stanサンプリング関数
 smp_stan <- function(model, data, pars, parameter_list, seed, chain, iter, warmup, thin){
   fit <- sampling(
     model,
     data = data,
-    #pars = pars,
+    pars = pars,
     #init = function(){parameter_list},
     seed = seed,
     chain = chain,
@@ -91,6 +122,7 @@ smp_stan <- function(model, data, pars, parameter_list, seed, chain, iter, warmu
 #-------------------------------------------------------------------------------
 #---初期設定
 set <- setting()
+pars <- set_par()
 
 #---csv読込
 ifnm1 <- "data-attendance-1.txt"
@@ -106,7 +138,6 @@ data <- list(
   Score = df$Score/200,
   Y = df$Y
 )
-#data
 
 #-------------------------------------------------------------------------------
 #---stanモデルの実行
@@ -118,7 +149,7 @@ stanmodel <- cmpl_stan(mdl, ifnm2)
 fit <- smp_stan(
   stanmodel, 
   data = data, 
-  #pars = pars, 
+  pars = pars, 
   #parameter_list = par_ini, 
   seed = set$seed, 
   chain = set$chain, 
@@ -126,3 +157,11 @@ fit <- smp_stan(
   warmup = set$warmup, 
   thin = set$thin
 )
+
+#---サンプル抽出
+ms <- rstan::extract(fit)
+
+#-------------------------------------------------------------------------------
+#---stan結果出力
+ofnm1 <- "MLR5_result.RData"
+wr_stan(outdt, ofnm1)
