@@ -1,5 +1,6 @@
 #---第2部Stan入門編---第5章基本的な回帰とモデルのチェック---5.1重回帰
 #---Jiro Nagao
+
 #---モデルラン
 
 #---2024-10-01-Tuesday
@@ -7,7 +8,7 @@
 #-------------------------------------------------------------------------------
 setwd("C:/Users/njiro/OneDrive/O_DRV/WD/R_WD/lsn/matsu/MLR5")
 rm(list = ls())
-wd <- getwd()
+#wd <- getwd()
 
 #-------------------------------------------------------------------------------
 #---パッケージ読込
@@ -151,8 +152,9 @@ fit <- smp_stan(
   data = data, 
   pars = pars, 
   #parameter_list = par_ini, 
+
+    chain = set$chain, 
   seed = set$seed, 
-  chain = set$chain, 
   iter = set$iter, 
   warmup = set$warmup, 
   thin = set$thin
