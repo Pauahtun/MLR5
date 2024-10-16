@@ -6,9 +6,9 @@
 #---2024-10-01-Tuesday
 
 #-------------------------------------------------------------------------------
-setwd("C:/Users/njiro/OneDrive/O_DRV/WD/R_WD/lsn/matsu/MLR5")
+#setwd("C:/Users/njiro/OneDrive/O_DRV/WD/R_WD/lsn/matsu/MLR5")
 rm(list = ls())
-#wd <- getwd()
+wd <- getwd()
 
 #-------------------------------------------------------------------------------
 #---パッケージ読込
@@ -36,7 +36,7 @@ setting <- function(){
     chain = 3,
     iter = 1000,
     warmup = 200,
-    thin =2
+    thin = 2
   )
   return(set)
 }
@@ -105,7 +105,7 @@ smp_stan <- function(model, data, pars, parameter_list, seed, chain, iter, warmu
   fit <- sampling(
     model,
     data = data,
-    pars = pars,
+    #pars = pars,
     #init = function(){parameter_list},
     seed = seed,
     chain = chain,
@@ -136,7 +136,7 @@ df <- rd_csv(indt, ifnm1)
 data <- list(
   N = nrow(df),
   A = df$A,
-  Score = df$Score/200,
+  Score = df$Score / 200,
   Y = df$Y
 )
 
@@ -150,10 +150,10 @@ stanmodel <- cmpl_stan(mdl, ifnm2)
 fit <- smp_stan(
   stanmodel, 
   data = data, 
-  pars = pars, 
+  #pars = pars, 
   #parameter_list = par_ini, 
 
-    chain = set$chain, 
+  chain = set$chain, 
   seed = set$seed, 
   iter = set$iter, 
   warmup = set$warmup, 
@@ -161,9 +161,11 @@ fit <- smp_stan(
 )
 
 #---サンプル抽出
+fit
 ms <- rstan::extract(fit)
+#head(ms)
 
 #-------------------------------------------------------------------------------
 #---stan結果出力
-ofnm1 <- "MLR5_result.RData"
-wr_stan(outdt, ofnm1)
+#ofnm1 <- "MLR5_result.RData"
+#wr_stan(outdt, ofnm1)

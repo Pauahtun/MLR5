@@ -9,7 +9,7 @@
 #---2024-10-01-Tuesday
 
 #-------------------------------------------------------------------------------
-setwd("C:/Users/njiro/OneDrive/O_DRV/WD/R_WD/lsn/matsu/MLR5")
+#setwd("C:/Users/njiro/OneDrive/O_DRV/WD/R_WD/lsn/matsu/MLR5")
 rm(list = ls())
 wd <- getwd()
 
